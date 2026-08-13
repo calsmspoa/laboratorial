@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Resultado de Exame - SARS-CoV-2</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 14px;
+            background: #f5f5f5;
+            color: #1a202c;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.10);
+        }
+
+        /* CABEÇALHO */
+        .header {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 25px;
+        }
+
+        .header td {
+            vertical-align: middle;
+            padding: 5px;
+        }
+
+        .header-left {
+            width: 20%;
+            text-align: left;
+        }
+
+        .header-center {
+            width: 60%;
+            text-align: center;
+        }
+
+        .header-right {
+            width: 20%;
+            text-align: right;
+        }
+
+        .header img {
+            max-width: 100px;
+            height: auto;
+        }
+
+        .prefeitura {
+            font-weight: bold;
+            font-size: 19px;
+            color: #1a365d;
+            text-transform: uppercase;
+        }
+
+        .secretaria {
+            font-size: 15px;
+            color: #4a5568;
+            margin-top: 2px;
+        }
+
+        .titulo {
+            font-weight: bold;
+            font-size: 13px;
+            color: #1a365d;
+            text-align: center;
+            margin-top: 5px;
+            border-top: 2px solid #1a365d;
+            border-bottom: 2px solid #1a365d;
+            padding: 10px 5px;
+        }
+
+        /* FORMULÁRIO */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px 18px;
+            margin-top: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-size: 12px;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="time"] {
+            width: 100%;
+            height: 15px;
+            border: 1px solid #a0aec0;
+            border-radius: 4px;
+            padding: 7px 10px;
+            font-size: 12px;
+			text-transform: uppercase;
+            background: #fff;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #3182ce;
+            box-shadow: 0 0 0 2px rgba(49,130,206,0.15);
+        }
+
+        /* CAMPOS AUTOMÁTICOS */
+        input.automatico {
+            background-color: #edf2f7;
+            color: #2d3748;
+            font-weight: bold;
+            cursor: not-allowed;
+        }
+
+        /* RADIO BUTTONS */
+        .radio-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: center;
+            margin-top: 5px;
+        }
+
+        .radio-group label {
+            font-size: 13px;
+            font-weight: normal;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin: 0;
+        }
+
+        input[type="radio"] {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* TÍTULOS DAS SEÇÕES */
+        .section-title {
+            margin-top: 10px;
+            margin-bottom: 10px;
+            background: #1a365d;
+            color: #ffffff;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 8px 10px;
+            text-transform: uppercase;
+        }
+
+        /* OBSERVAÇÕES */
+        .observations {
+            border: 1px solid #cbd5e0;
+            padding: 12px 15px;
+            background: #f8fafc;
+            font-size: 10px;
+            line-height: 1.2;
+        }
+
+        .observations ol {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .observations li {
+            margin-bottom: 8px;
+        }
+
+        .observations li:last-child {
+            margin-bottom: 0;
+        }
+
+        /* BOTÃO */
+        .btn-submit {
+            display: block;
+            width: 100%;
+            margin-top: 25px;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            background: #1a365d;
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-submit:hover {
+            background: #2c5282;
+        }
+
+        /* IMPRESSÃO */
+        @media print {
+            body {
+                background: #ffffff;
+                padding: 0;
+            }
+
+            .container {
+                max-width: 100%;
+                box-shadow: none;
+                padding: 10px;
+            }
+
+            .btn-submit {
+                display: none;
+            }
+
+            input,
+            textarea {
+                border: 1px solid #999;
+            }
+
+            .automatico {
+                background: #ffffff !important;
+                color: #000000 !important;
+            }
+
+            @page {
+                size: A4;
+                margin: 12mm;
+            }
+        }
+
+        /* CELULAR */
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full-width {
+                grid-column: 1;
+            }
+
+            .header .prefeitura {
+                font-size: 15px;
+            }
+
+            .header .secretaria {
+                font-size: 12px;
+            }
+
+            .header img {
+                max-width: 70px;
+            }
+
+            .radio-group {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+    </style>
+
+<style>
+#loginOverlay {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    background: #f5f5f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#loginBox {
+    width: min(380px, 90%);
+    background: #fff;
+    padding: 28px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,.15);
+    text-align: center;
+}
+#loginBox h2 {
+    margin: 0 0 18px;
+    color: #1a365d;
+    font-size: 20px;
+}
+#loginBox input {
+    width: 100%;
+    padding: 11px;
+    margin: 7px 0;
+    border: 1px solid #a0aec0;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+#loginBox button {
+    width: 100%;
+    margin-top: 12px;
+    padding: 11px;
+    border: 0;
+    border-radius: 5px;
+    background: #1a365d;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+#loginErro {
+    color: #c53030;
+    font-size: 13px;
+    margin-top: 10px;
+    display: none;
+}
+body.bloqueado {
+    overflow: hidden;
+}
+</style>
+
+</head>
+
+<body>
+
+<div id="loginOverlay">
+    <div id="loginBox">
+        <h2>Acesso Restrito</h2>
+        <input type="text" id="loginUsuario" placeholder="Usuário" autocomplete="username">
+        <input type="password" id="loginSenha" placeholder="Senha" autocomplete="current-password">
+        <button type="button" onclick="validarAcesso()">ENTRAR</button>
+        <div id="loginErro">Usuário ou senha inválidos.</div>
+    </div>
+</div>
+
+
+<div class="container">
+
+    <!-- CABEÇALHO -->
+    <table class="header">
+        <tr>
+
+            <!-- Lado Esquerdo: Logo PMPA -->
+        	<td style="width: 20%; text-align: left;">
+            <img src="https://github.com/flaviofsantos-pe/covid/blob/main/logo%20pmpa.jpg?raw=true" alt="Logo PMPA" style="max-width: 100px; height: auto;">
+        </td>
+
+            <!-- Centro: Textos -->
+            <td class="header-center">
+                <div class="prefeitura">
+                    PREFEITURA DE PORTO ALEGRE
+                </div>
+
+                <div class="secretaria">
+                    SECRETARIA MUNICIPAL DE SAÚDE
+                </div>
+            </td>
+
+            </td>
+ 	  	<!-- Lado Direito: Imagem Indicada -->
+        	<td style="width: 20%; text-align: right;">
+            <img src="https://github.com/flaviofsantos-pe/covid/blob/main/Sus%20transparente.png?raw=true" alt="Registro Imagem" style="max-width: 100px; height: auto;">
+        </td>
+
+        </tr>
+    </table>
+
+    <div class="titulo">
+        RESULTADO DE EXAME IMUNOCROMATOGRÁFICO - SARS-CoV-2
+    </div>
+
+
+    <!-- FORMULÁRIO -->
+    <form id="formularioExame">
+
+        <div class="form-grid">
+
+            <!-- NOME -->
+            <div class="form-group full-width">
+                <label for="nome">NOME COMPLETO:</label>
+                <input
+                    type="text"
+                    id="nome"
+                    name="nome"
+                    required
+                >
+            </div>
+
+
+            <!-- NOME SOCIAL -->
+            <div class="form-group">
+                <label for="nome_social">NOME SOCIAL:</label>
+                <input
+                    type="text"
+                    id="nome_social"
+                    name="nome_social"
+                >
+            </div>
+
+
+            <!-- CPF -->
+            <div class="form-group">
+                <label for="cpf">CPF:</label>
+                <input
+                    type="text"
+                    id="cpf"
+                    name="cpf"
+                    placeholder="000.000.000-00"
+                >
+            </div>
+
+
+            <!-- UNIDADE -->
+            <div class="form-group">
+                <label for="unidade">UNIDADE DE SAÚDE:</label>
+                <input
+                    type="text"
+                    id="unidade"
+                    name="unidade"
+                >
+            </div>
+
+
+            <!-- DATA NASCIMENTO -->
+            <div class="form-group">
+                <label for="data_nascimento">
+                    DATA DE NASCIMENTO:
+                </label>
+
+                <input
+                    type="date"
+                    id="data_nascimento"
+                    name="data_nascimento"
+                >
+            </div>
+
+
+            <!-- DATA COLETA -->
+            <div class="form-group">
+                <label for="data_coleta">
+                    DATA DA COLETA:
+                </label>
+
+                <input
+                    type="date"
+                    id="data_coleta"
+                    name="data_coleta"
+                >
+            </div>
+
+
+            <!-- HORÁRIO COLETA -->
+            <div class="form-group">
+                <label for="horario_coleta">
+                    HORÁRIO DA COLETA:
+                </label>
+
+                <input
+                    type="time"
+                    id="horario_coleta"
+                    name="horario_coleta"
+                >
+            </div>
+
+
+            <!-- AMOSTRA -->
+            <div class="form-group full-width">
+
+                <label>AMOSTRA:</label>
+
+                <div class="radio-group">
+
+                    <label>
+                        <input
+                            type="radio"
+                            name="amostra"
+                            value="nasal"
+                        >
+                        SWAB NASAL
+                    </label>
+
+                    <label>
+                        <input
+                            type="radio"
+                            name="amostra"
+                            value="orofaringeo"
+                        >
+                        SWAB OROFARÍNGEO
+                    </label>
+
+                    <label>
+                        <input
+                            type="radio"
+                            name="amostra"
+                            value="nasofaringeo"
+                        >
+                        SWAB NASOFARÍNGEO
+                    </label>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- RESULTADO -->
+        <div class="section-title">
+            RESULTADO
+        </div>
+
+        <div class="radio-group">
+
+            <label>
+                <input
+                    type="radio"
+                    name="resultado"
+                    value="reagente"
+                >
+                <strong>REAGENTE</strong>
+            </label>
+
+            <label>
+                <input
+                    type="radio"
+                    name="resultado"
+                    value="nao_reagente"
+                >
+                <strong>NÃO REAGENTE</strong>
+            </label>
+
+        </div>
+
+
+        <!-- IDENTIFICAÇÃO DO TESTE -->
+        <div class="section-title">
+            IDENTIFICAÇÃO DO TESTE
+        </div>
+
+        <div class="form-grid">
+
+            <div class="form-group full-width">
+
+                <label for="marca">
+                    MARCA / FABRICANTE DO TESTE:
+                </label>
+
+                <input
+                    type="text"
+                    id="marca"
+                    name="marca"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="lote">
+                    LOTE:
+                </label>
+
+                <input
+                    type="text"
+                    id="lote"
+                    name="lote"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="validade">
+                    VALIDADE DO TESTE:
+                </label>
+
+                <input
+                    type="date"
+                    id="validade"
+                    name="validade"
+                >
+
+            </div>
+
+        </div>
+
+
+        <!-- OBSERVAÇÕES -->
+        <div class="section-title">
+            OBSERVAÇÕES
+        </div>
+
+        <div class="observations">
+
+            <ol>
+
+                <li>
+                    <strong>Resultado REAGENTE:</strong>
+                    indica detecção de antígeno do SARS-CoV-2 na amostra
+                    e deve ser interpretado em conjunto com as informações
+                    clínicas e epidemiológicas.
+                </li>
+
+                <li>
+                    <strong>Resultado NÃO REAGENTE:</strong>
+                    não exclui a possibilidade de infecção pelo SARS-CoV-2,
+                    especialmente quando a coleta ocorre em período inadequado
+                    ou diante de elevada suspeita clínica. A necessidade de
+                    nova avaliação e/ou de outro método diagnóstico deverá ser
+                    definida pelo profissional de saúde responsável.
+                </li>
+
+                <li>
+                    <strong>Princípio do Teste:</strong>
+                     imunocromatografia para a detecção qualitativa do antígeno 
+			   SARS-CoV-2 em esfregaços nasais, nasofaríngeos ou orofaríngeos 
+			   para auxílio no diagnóstico da 
+	               síndrome respiratória aguda grave (SARS-CoV-2).
+                </li>
+
+                <li>
+                    Este resultado de exame não determina, isoladamente,
+                    diagnóstico clínico, período de isolamento, afastamento
+                    de atividades ou outras condutas assistenciais. A avaliação
+                    e a orientação clínica devem considerar os sinais e sintomas,
+                    o histórico do paciente, as condições individuais e as
+                    recomendações vigentes do Ministério da Saúde.
+                </li>
+
+                <li>
+                    As orientações relativas ao isolamento e às medidas de
+                    prevenção devem observar a Nota Técnica nº 5/2026-CGCOVID/
+                    DEDT/SVSA/MS e demais normas e orientações vigentes no
+                    momento do atendimento.
+                </li>
+
+                <li>
+                    <strong>Este documento só é válido com carimbo e assinatura 
+                    de profissional habilitado.</strong>
+                </li>
+
+            </ol>
+
+        </div>
+
+
+        <!-- RESPONSÁVEL / DATA / HORÁRIO -->
+        <div
+            class="form-grid"
+            style="margin-top: 15px;"
+        >
+
+            <!-- RESPONSÁVEL -->
+            <div class="form-group full-width">
+
+                <label for="responsavel">
+                    CARIMBO E ASSINATURA DO PROFISSIONAL RESPONSÁVEL:
+                </label>
+
+                <input
+                    type="text"
+                    id="responsavel"
+                    name="responsavel"
+                >
+
+            </div>
+
+
+            <!-- DATA AUTOMÁTICA -->
+            <div class="form-group">
+
+                <label for="data_exame">
+                    DATA DO EXAME:
+                </label>
+
+                <input
+                    type="date"
+                    id="data_exame"
+                    name="data_exame"
+                    class="automatico"
+                    readonly
+                >
+
+            </div>
+
+
+            <!-- HORÁRIO AUTOMÁTICO -->
+            <div class="form-group">
+
+                <label for="horario_exame">
+                    HORÁRIO:
+                </label>
+
+                <input
+                    type="time"
+                    id="horario_exame"
+                    name="horario_exame"
+                    class="automatico"
+                    readonly
+                >
+
+            </div>
+
+        </div>
+
+
+        <!-- BOTÃO -->
+        <button
+            type="button"
+            class="btn-submit"
+            onclick="window.print()"
+        >
+            Imprimir / Salvar em PDF
+        </button>
+
+    </form>
+
+</div>
+
+
+<!-- JAVASCRIPT -->
+<script>
+
+    /*
+     * DATA E HORÁRIO AUTOMÁTICOS
+     *
+     * Utiliza a data e hora configuradas
+     * no computador onde a página está aberta.
+     */
+
+    function preencherDataHoraExame() {
+
+        const agora = new Date();
+
+
+        // ==========================
+        // DATA
+        // ==========================
+
+        const ano = agora.getFullYear();
+
+        const mes = String(
+            agora.getMonth() + 1
+        ).padStart(2, '0');
+
+        const dia = String(
+            agora.getDate()
+        ).padStart(2, '0');
+
+
+        // ==========================
+        // HORÁRIO
+        // ==========================
+
+        const hora = String(
+            agora.getHours()
+        ).padStart(2, '0');
+
+        const minuto = String(
+            agora.getMinutes()
+        ).padStart(2, '0');
+
+
+        // ==========================
+        // PREENCHIMENTO
+        // ==========================
+
+        document.getElementById(
+            'data_exame'
+        ).value = `${ano}-${mes}-${dia}`;
+
+
+        document.getElementById(
+            'horario_exame'
+        ).value = `${hora}:${minuto}`;
+
+    }
+
+
+    // Executa automaticamente
+    // quando a página é carregada.
+
+    document.addEventListener(
+        'DOMContentLoaded',
+        preencherDataHoraExame
+    );
+
+</script>
+
+
+<script>
+/*
+ * CONTROLE DE ACESSO
+ * Altere USUARIO_ACESSO e SENHA_ACESSO para os valores desejados.
+ */
+const USUARIO_ACESSO = "unidadesdesaude";
+const SENHA_ACESSO = "Saude.#";
+
+document.body.classList.add("bloqueado");
+
+function validarAcesso() {
+    const usuario = document.getElementById("loginUsuario").value;
+    const senha = document.getElementById("loginSenha").value;
+    const erro = document.getElementById("loginErro");
+
+    if (usuario === USUARIO_ACESSO && senha === SENHA_ACESSO) {
+        document.getElementById("loginOverlay").style.display = "none";
+        document.body.classList.remove("bloqueado");
+        sessionStorage.setItem("acessoAutorizado", "1");
+    } else {
+        erro.style.display = "block";
+        document.getElementById("loginSenha").value = "";
+        document.getElementById("loginSenha").focus();
+    }
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    if (sessionStorage.getItem("acessoAutorizado") === "1") {
+        document.getElementById("loginOverlay").style.display = "none";
+        document.body.classList.remove("bloqueado");
+    }
+
+    document.getElementById("loginSenha").addEventListener("keydown", function(e) {
+        if (e.key === "Enter") validarAcesso();
+    });
+});
+</script>
+
+</body>
+</html>
